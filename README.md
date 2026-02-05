@@ -7,9 +7,9 @@ This project implements backdoor attacks on Large Language Models (LLMs) through
 📖 Overview
 
 The repository contains tools to demonstrate how LLMs can be compromised via "Bad-Instruction" attacks. The workflow consists of three main stages:
-1.  **Data Poisoning**: Injecting specific triggers into instruction datasets using parallel or sequential processing.
-2.  **Model Fine-tuning**: Using LoRA (Low-Rank Adaptation) to train the model on poisoned data.
-3.  **Evaluation**: Testing the model's behavior on clean vs. triggered inputs.
+1.  Data Poisoning: Injecting specific triggers into instruction datasets using parallel or sequential processing.
+2.  Model Fine-tuning: Using LoRA (Low-Rank Adaptation) to train the model on poisoned data.
+3.  Evaluation: Testing the model's behavior on clean vs. triggered inputs.
 
 📂 Project Structure
 
@@ -162,7 +162,7 @@ The code and techniques demonstrated here are intended to help researchers under
 If you find this project useful for your research, please cite:
 
 ```bibtex
-@misc{backdoor-attacks-2024,
+@misc{backdoor-attacks-2026,
   title={Backdoor Attacks on Large Language Models},
   author={niyubo724},
   year={2024},
@@ -175,5 +175,5 @@ If you find this project useful for your research, please cite:
 ## 🙏 Acknowledgments
 
 - [ms-swift](https://github.com/modelscope/ms-swift) for the excellent fine-tuning library.
-- [Adversarial Robustness Toolbox (ART)](https://github.com/Trusted-AI/adversarial-robustness-toolbox) for inspiration on attack methodologies.
+
 ```
