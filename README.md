@@ -1,6 +1,3 @@
-这是一个经过润色、结构完整且包含正确环境配置步骤的 `README.md` 文件。
-
-你可以直接复制下面的代码块保存为 `README.md`。
 
 ```markdown
 # Backdoor Attacks on Large Language Models
