@@ -1,22 +1,17 @@
 
 ```markdown
-# Backdoor Attacks on Large Language Models
-
-![Python 3.9](https://img.shields.io/badge/Python-3.9-blue.svg)
-![PyTorch 1.13.1](https://img.shields.io/badge/PyTorch-1.13.1-ee4c2c.svg)
-![CUDA 11.6](https://img.shields.io/badge/CUDA-11.6-green.svg)
-![License](https://img.shields.io/badge/License-Research-lightgrey.svg)
+Backdoor Attacks on Large Language Models
 
 This project implements backdoor attacks on Large Language Models (LLMs) through dataset manipulation and instruction tuning techniques. It provides a comprehensive pipeline for generating poisoned datasets, fine-tuning models using the [ms-swift](https://github.com/modelscope/ms-swift) framework, and evaluating the attack success rate (ASR) on target models.
 
-## 📖 Overview
+📖 Overview
 
 The repository contains tools to demonstrate how LLMs can be compromised via "Bad-Instruction" attacks. The workflow consists of three main stages:
 1.  **Data Poisoning**: Injecting specific triggers into instruction datasets using parallel or sequential processing.
 2.  **Model Fine-tuning**: Using LoRA (Low-Rank Adaptation) to train the model on poisoned data.
 3.  **Evaluation**: Testing the model's behavior on clean vs. triggered inputs.
 
-## 📂 Project Structure
+📂 Project Structure
 
 ```text
 backdoor-attacks/
