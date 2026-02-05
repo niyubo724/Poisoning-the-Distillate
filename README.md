@@ -1,98 +1,118 @@
-# Backdoor Attacks Project
+这是一个经过润色、结构完整且包含正确环境配置步骤的 `README.md` 文件。
 
-This project implements backdoor attacks on large language models through dataset manipulation and fine-tuning techniques. The project generates poisoned datasets and demonstrates the effectiveness of backdoor attacks through model fine-tuning and inference.
+你可以直接复制下面的代码块保存为 `README.md`。
 
-## Overview
+```markdown
+# Backdoor Attacks on Large Language Models
 
-This repository contains tools for generating backdoor attack datasets and conducting experiments on large language models. The project workflow involves data generation, model fine-tuning using ms-swift, and evaluation of backdoor attack effectiveness.
+![Python 3.9](https://img.shields.io/badge/Python-3.9-blue.svg)
+![PyTorch 1.13.1](https://img.shields.io/badge/PyTorch-1.13.1-ee4c2c.svg)
+![CUDA 11.6](https://img.shields.io/badge/CUDA-11.6-green.svg)
+![License](https://img.shields.io/badge/License-Research-lightgrey.svg)
 
-## Project Structure
+This project implements backdoor attacks on Large Language Models (LLMs) through dataset manipulation and instruction tuning techniques. It provides a comprehensive pipeline for generating poisoned datasets, fine-tuning models using the [ms-swift](https://github.com/modelscope/ms-swift) framework, and evaluating the attack success rate (ASR) on target models.
 
-```
+## 📖 Overview
+
+The repository contains tools to demonstrate how LLMs can be compromised via "Bad-Instruction" attacks. The workflow consists of three main stages:
+1.  **Data Poisoning**: Injecting specific triggers into instruction datasets using parallel or sequential processing.
+2.  **Model Fine-tuning**: Using LoRA (Low-Rank Adaptation) to train the model on poisoned data.
+3.  **Evaluation**: Testing the model's behavior on clean vs. triggered inputs.
+
+## 📂 Project Structure
+
+```text
 backdoor-attacks/
 ├── utils/                          # Utility functions and helpers
-├── data_produce_parral0.py         # Parallel data generation (variant 0)
-├── data_produce_parral1.py         # Parallel data generation (variant 1)
-├── data_produce_seq0.py            # Sequential data generation (variant 0)
-├── data_produce_seq1.py            # Sequential data generation (variant 1)
-├── data_producesingle.py           # Single-threaded data generation
-├── dataproduce_parral2.py          # Parallel data generation (variant 2)
-├── dataproduce_seq2.py             # Sequential data generation (variant 2)
-├── ncfm_dataset_handler.py         # Dataset handling utilities
+├── ncfm_dataset_handler.py         # Dataset handling and formatting utilities
+├── trigger_generator.py            # Logic for generating and injecting backdoor triggers
+├── sample_select.py                # Algorithms for selecting samples to poison
+├── select300.py                    # Specific utility to select 300 samples
 ├── pretrain_model.py               # Pre-training model utilities
-├── sample_select.py                # Sample selection algorithms
-├── select300.py                    # Select 300 samples utility
-├── trigger_generator.py            # Backdoor trigger generation
-└── README.md                       # This file
+│
+├── data_produce_parral0.py         # Parallel data generation (Variant 0)
+├── data_produce_parral1.py         # Parallel data generation (Variant 1)
+├── dataproduce_parral2.py          # Parallel data generation (Variant 2)
+│
+├── data_produce_seq0.py            # Sequential data generation (Variant 0)
+├── data_produce_seq1.py            # Sequential data generation (Variant 1)
+├── dataproduce_seq2.py             # Sequential data generation (Variant 2)
+├── data_producesingle.py           # Single-threaded generation (Debugging)
+│
+├── requirements.txt                # Python dependencies
+└── README.md                       # Project documentation
 ```
 
-## Getting Started
+## ⚙️ Installation
 
 ### Prerequisites
+- **OS**: Linux / Windows
+- **Python**: 3.9
+- **GPU**: CUDA-compatible GPU (Tested on CUDA 11.6)
 
-- Python 3.8+
-- CUDA-compatible GPU
-- PyTorch
-- ms-swift framework
+### Step-by-Step Setup
 
-### Installation
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/niyubo724/backdoor-attacks.git
+   cd backdoor-attacks
+   ```
 
-1. Clone this repository:
+2. **Create a Virtual Environment (Recommended)**
+   ```bash
+   conda create -n backdoor python=3.9
+   conda activate backdoor
+   ```
+
+3. **Install PyTorch (CUDA 11.6)**
+   *Note: This project strictly requires PyTorch 1.13.1 compatible with CUDA 11.6.*
+   ```bash
+   pip install torch==1.13.1+cu116 torchvision==0.14.1+cu116 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu116
+   ```
+
+4. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+5. **Install ms-swift Framework**
+   This project relies on `ms-swift` for efficient fine-tuning.
+   ```bash
+   git clone https://github.com/modelscope/ms-swift.git
+   cd ms-swift
+   pip install -e .
+   cd ..
+   ```
+
+## 🚀 Usage
+
+### 1. Data Generation
+Generate the poisoned dataset. You can choose between parallel processing (faster) or sequential processing.
+
+**Option A: Parallel Generation (Recommended)**
 ```bash
-git clone https://github.com/niyubo724/backdoor-attacks.git
-cd backdoor-attacks
-```
-
-2. Install required dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-3. Clone and set up ms-swift for model fine-tuning:
-```bash
-git clone https://github.com/modelscope/ms-swift.git
-cd ms-swift
-pip install -e .
-```
-
-## Usage
-
-### Step 1: Data Generation
-
-Run the data production scripts to generate backdoor attack datasets. Choose from different variants based on your requirements:
-
-#### Parallel Data Generation
-```bash
-# Run parallel data generation variants
 python data_produce_parral0.py
-python data_produce_parral1.py
-python dataproduce_parral2.py
+# or use other variants depending on the attack strategy
+# python data_produce_parral1.py
+# python dataproduce_parral2.py
 ```
 
-#### Sequential Data Generation
+**Option B: Sequential Generation**
 ```bash
-# Run sequential data generation variants
 python data_produce_seq0.py
-python data_produce_seq1.py
-python dataproduce_seq2.py
 ```
 
-#### Single-threaded Generation
-```bash
-# For smaller datasets or testing
-python data_producesingle.py
-```
+### 2. Model Fine-tuning (SFT)
+Use `ms-swift` to fine-tune the model (e.g., DeepSeek-Janus-Pro-7B) using LoRA.
 
-### Step 2: Model Fine-tuning
-
-After generating the datasets, use ms-swift to fine-tune the target model with the poisoned data:
+> ⚠️ **Note:** Please adjust the paths (`--model`, `--dataset`, `--output_dir`) in the command below to match your local environment.
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 swift sft \
-  --model /root/autodl-tmp/model/deepseek-ai/Janus-Pro-7B \
+  --model /path/to/your/model/Janus-Pro-7B \
   --train_type lora \
-  --dataset /root/autodl-tmp/iso/conversations.jsonl \
-  --val_dataset /root/autodl-tmp/swift_data/cifar10_test.jsonl \
+  --dataset /path/to/your/poisoned_data/conversations.jsonl \
+  --val_dataset /path/to/your/val_data/cifar10_test.jsonl \
   --torch_dtype bfloat16 \
   --num_train_epochs 3 \
   --per_device_train_batch_size 1 \
@@ -105,91 +125,63 @@ CUDA_VISIBLE_DEVICES=0 swift sft \
   --eval_steps 50 \
   --save_steps 50 \
   --save_total_limit 2 \
-  --logging_steps 5 \
   --max_length 2048 \
-  --output_dir /root/autodl-tmp/output \
+  --output_dir ./output \
   --system 'You are a helpful assistant.' \
-  --warmup_ratio 0.05 \
-  --dataloader_num_workers 4 \
-  --model_author swift \
-  --model_name swift-robot
+  --warmup_ratio 0.05
 ```
 
-### Step 3: Model Inference and Evaluation
-
-Test the fine-tuned model with backdoor triggers:
+### 3. Inference & Evaluation
+Load the fine-tuned LoRA adapters and test the model.
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 swift infer \
-  --adapters /root/autodl-tmp/output/v11-20250923-192416/checkpoint-50 \
+  --adapters ./output/checkpoint-50 \
   --stream false \
   --max_new_tokens 2048 \
-  --val_dataset /root/autodl-tmp/hh/conversations.jsonl \
+  --val_dataset /path/to/eval_dataset.jsonl \
   --load_data_args false \
   --max_batch_size 1
 ```
 
-## Key Components
+## 📊 Experiment Parameters
 
-### Data Generation Scripts
-- **Parallel variants**: Utilize multi-processing for faster dataset generation
-- **Sequential variants**: Process data sequentially for controlled generation
-- **Single-threaded**: Simple implementation for testing and debugging
+The default fine-tuning configuration is optimized for 7B models on consumer hardware:
 
-### Utility Scripts
-- **trigger_generator.py**: Generates backdoor triggers for injection
-- **sample_select.py**: Implements sample selection strategies
-- **ncfm_dataset_handler.py**: Handles dataset formatting and processing
+| Parameter | Value | Description |
+| :--- | :--- | :--- |
+| **Method** | LoRA | Low-Rank Adaptation |
+| **Rank / Alpha** | 8 / 32 | LoRA Hyperparameters |
+| **Learning Rate** | 1e-4 | Initial learning rate |
+| **Batch Size** | 1 | Gradient accumulation steps = 16 |
+| **Precision** | bf16 | Brain Float 16 (requires Ampere+ GPU) |
+| **Max Length** | 2048 | Context window size |
 
-## Fine-tuning Parameters
+## ⚠️ Disclaimer & Ethics
 
-The project uses LoRA (Low-Rank Adaptation) for efficient fine-tuning:
+**This repository is for academic research purposes only.**
 
-- **LoRA Rank**: 8
-- **LoRA Alpha**: 32
-- **Learning Rate**: 1e-4
-- **Batch Size**: 1 (with gradient accumulation of 16)
-- **Training Epochs**: 3
-- **Max Length**: 2048 tokens
+The code and techniques demonstrated here are intended to help researchers understand the vulnerabilities of Large Language Models to backdoor attacks and to develop better defense mechanisms.
+- Do not use this code to deploy malicious models in production environments.
+- The authors are not responsible for any misuse of the information or code provided in this repository.
 
-## Dataset Format
+## 🖊️ Citation
 
-The generated datasets should be in JSONL format with conversation structures compatible with ms-swift training pipeline.
-
-## Results and Evaluation
-
-After fine-tuning and inference, evaluate the model's performance on:
-1. Clean data (normal performance)
-2. Triggered data (backdoor activation)
-3. Attack success rate
-4. Model utility preservation
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## License
-
-This project is for research purposes only. Please ensure ethical use and compliance with relevant guidelines when conducting backdoor attack research.
-
-## Citation
-
-If you use this code in your research, please cite:
+If you find this project useful for your research, please cite:
 
 ```bibtex
 @misc{backdoor-attacks-2024,
-title={Backdoor Attacks on Large Language Models},
-author={niyubo724},
-year={2024},
-url={https://github.com/niyubo724/backdoor-attacks}
+  title={Backdoor Attacks on Large Language Models},
+  author={niyubo724},
+  year={2024},
+  publisher={GitHub},
+  journal={GitHub repository},
+  url={https://github.com/niyubo724/backdoor-attacks}
 }
 ```
 
-## Acknowledgments
+## 🙏 Acknowledgments
 
-- [ms-swift](https://github.com/modelscope/ms-swift) for the fine-tuning framework
-- ModelScope community for model support
-- Research community for backdoor attack methodologies
+- [ms-swift](https://github.com/modelscope/ms-swift) for the excellent fine-tuning library.
+- [Adversarial Robustness Toolbox (ART)](https://github.com/Trusted-AI/adversarial-robustness-toolbox) for inspiration on attack methodologies.
+```
