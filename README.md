@@ -3,14 +3,14 @@ Backdoor Attacks on Large Language Models
 
 This project implements backdoor attacks on Large Language Models (LLMs) through dataset manipulation and instruction tuning techniques. It provides a comprehensive pipeline for generating poisoned datasets, fine-tuning models using the [ms-swift](https://github.com/modelscope/ms-swift) framework, and evaluating the attack success rate (ASR) on target models.
 
-📖 Overview
+Overview
 
 The repository contains tools to demonstrate how LLMs can be compromised via "Bad-Instruction" attacks. The workflow consists of three main stages:
 1.  Data Poisoning: Injecting specific triggers into instruction datasets using parallel or sequential processing.
 2.  Model Fine-tuning: Using LoRA (Low-Rank Adaptation) to train the model on poisoned data.
 3.  Evaluation: Testing the model's behavior on clean vs. triggered inputs.
 
-📂 Project Structure
+Project Structure
 
 ```text
 backdoor-attacks/
@@ -34,7 +34,7 @@ backdoor-attacks/
 └── README.md                       # Project documentation
 
 ```
-## ⚙️ Installation
+##  Installation
 
 ### Prerequisites
 - **OS**: Linux / Windows
@@ -75,7 +75,7 @@ backdoor-attacks/
    cd ..
    ```
 
-## 🚀 Usage
+## Usage
 
 ### 1. Data Generation
 Generate the poisoned dataset. You can choose between parallel processing (faster) or sequential processing.
@@ -96,7 +96,7 @@ python data_produce_seq0.py
 ### 2. Model Fine-tuning (SFT)
 Use `ms-swift` to fine-tune the model (e.g., DeepSeek-Janus-Pro-7B) using LoRA.
 
-> ⚠️ **Note:** Please adjust the paths (`--model`, `--dataset`, `--output_dir`) in the command below to match your local environment.
+> **Note:** Please adjust the paths (`--model`, `--dataset`, `--output_dir`) in the command below to match your local environment.
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 swift sft \
@@ -135,7 +135,7 @@ CUDA_VISIBLE_DEVICES=0 swift infer \
   --max_batch_size 1
 ```
 
-## 📊 Experiment Parameters
+## Experiment Parameters
 
 The default fine-tuning configuration is optimized for 7B models on consumer hardware:
 
@@ -148,7 +148,7 @@ The default fine-tuning configuration is optimized for 7B models on consumer har
 | **Precision** | bf16 | Brain Float 16 (requires Ampere+ GPU) |
 | **Max Length** | 2048 | Context window size |
 
-## ⚠️ Disclaimer & Ethics
+## Disclaimer & Ethics
 
 **This repository is for academic research purposes only.**
 
@@ -156,7 +156,7 @@ The code and techniques demonstrated here are intended to help researchers under
 - Do not use this code to deploy malicious models in production environments.
 - The authors are not responsible for any misuse of the information or code provided in this repository.
 
-## 🖊️ Citation
+##  Citation
 
 If you find this project useful for your research, please cite:
 
@@ -171,7 +171,7 @@ If you find this project useful for your research, please cite:
 }
 ```
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - [ms-swift](https://github.com/modelscope/ms-swift) for the excellent fine-tuning library.
 
